@@ -78,13 +78,14 @@ const help = document.getElementById("help");
 
 let score = 0;
 let incorrectAnswer = [];
+let userAnswers = [];
 let currQuestionIndex = 0;
-
+let shuffledQuestion;
 // Function...
-const shuffledQuestion = randomizeArr(questionBank);
 
 let messageTimeout;
-function displayQuestion() {
+function displayFirstQuestion() {
+  shuffledQuestion = randomizeArr(questionBank);
   const questionData = shuffledQuestion[currQuestionIndex];
   console.log(`Currently on index: ${currQuestionIndex}`);
   retryBtn.style.display = "none";
@@ -115,6 +116,8 @@ function displayQuestion() {
     optionElemContainer.appendChild(label);
     quiz.appendChild(optionElemContainer);
   }
+
+  stateManager();
 }
 
 function nextQuestion() {
@@ -157,6 +160,7 @@ function nextQuestion() {
     optionElemContainer.appendChild(label);
     quiz.appendChild(optionElemContainer);
   }
+  stateManager();
 }
 
 function chkAns() {
@@ -164,6 +168,12 @@ function chkAns() {
   const selected = document.querySelector("input[name='quiz']:checked");
   if (selected) {
     const answer = selected.value;
+    userAnswers[currQuestionIndex] = {
+      question: questionData.question,
+      answer,
+      isCorrect: answer === questionData.answer,
+    };
+    console.table(userAnswers);
     if (answer === questionData.answer) {
       score += 10;
       console.log(score);
@@ -176,12 +186,9 @@ function chkAns() {
       console.table(incorrectAnswer);
     }
   } else {
-    const selected = document.querySelector("input[name='quiz']:checked");
-    if (!selected) {
-      help.textContent = `Please select an option!`;
-      setTimeout(() => (help.textContent = ""), 3000);
-      return;
-    }
+    help.textContent = `Please select an option!`;
+    setTimeout(() => (help.textContent = ""), 3000);
+    return;
   }
 }
 
@@ -191,6 +198,7 @@ function submit() {
     return;
   }
 
+  chkAns();
   startBtn.style.display = "none";
   nextQuestionBtn.style.display = "none";
   prevQuestionBtn.style.display = "none";
@@ -231,7 +239,7 @@ function showAns() {
 function prevQuestion() {
   if (currQuestionIndex > 0) {
     currQuestionIndex--;
-
+    score -= 10;
     const questionData2 = shuffledQuestion[currQuestionIndex];
     quiz.innerHTML = "";
     const questionElem = document.createElement("div");
@@ -255,10 +263,22 @@ function prevQuestion() {
       optionElemContainer.appendChild(label);
       quiz.appendChild(optionElemContainer);
     }
+    stateManager();
   }
   if (currQuestionIndex === 0) {
     prevQuestionBtn.style.display = "none";
   }
+}
+
+function stateManager() {
+  const savedAnswer = userAnswers[currQuestionIndex].answer;
+  if (!savedAnswer) return; // nothing saved yet
+  const inputs = document.querySelectorAll('input[name="quiz"]');
+  inputs.forEach((input) => {
+    if (input.value === savedAnswer) {
+      input.checked = true;
+    }
+  });
 }
 
 function randomizeArr(arr) {
@@ -274,8 +294,8 @@ function randomizeArr(arr) {
 }
 
 showAnsBtn.addEventListener("click", () => showAns());
-startBtn.addEventListener("click", () => displayQuestion());
-retryBtn.addEventListener("click", () => displayQuestion());
+startBtn.addEventListener("click", () => displayFirstQuestion());
+retryBtn.addEventListener("click", () => displayFirstQuestion());
 nextQuestionBtn.addEventListener("click", () => nextQuestion());
 prevQuestionBtn.addEventListener("click", () => prevQuestion());
 submitBtn.addEventListener("click", () => submit());
