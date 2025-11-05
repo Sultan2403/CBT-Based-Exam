@@ -73,6 +73,7 @@ const prevQuestionBtn = document.getElementById("prevQuestion");
 const quiz = document.getElementById("quiz");
 const result = document.getElementById("result");
 const help = document.getElementById("help");
+const counter = document.getElementById("counter");
 
 // Question Tracking.....
 
@@ -85,6 +86,10 @@ let shuffledQuestion;
 
 let messageTimeout;
 function displayFirstQuestion() {
+  incorrectAnswer = [];
+  userAnswers = [];
+  help.textContent = ``;
+  counter.textContent = ``;
   shuffledQuestion = randomizeArr(questionBank);
   const questionData = shuffledQuestion[currQuestionIndex];
   console.log(`Currently on index: ${currQuestionIndex}`);
@@ -107,16 +112,21 @@ function displayFirstQuestion() {
     optionElem.type = "radio";
     optionElem.name = "quiz";
     const optionElemContainer = document.createElement("div");
+    optionElemContainer.className = "options-container";
     optionElem.value = options[i];
 
+    const allOptionContainer = document.createElement("div");
+    allOptionContainer.className = "options-container";
     const label = document.createElement("label");
     label.textContent = options[i];
     label.htmlFor = "quiz";
+    allOptionContainer.appendChild(optionElemContainer);
     optionElemContainer.appendChild(optionElem);
     optionElemContainer.appendChild(label);
-    quiz.appendChild(optionElemContainer);
+    quiz.appendChild(allOptionContainer);
   }
 
+  timer();
   stateManager();
 }
 
@@ -192,6 +202,24 @@ function chkAns() {
   }
 }
 
+function submitWithoutConfirmation() {
+  chkAns();
+  startBtn.style.display = "none";
+  nextQuestionBtn.style.display = "none";
+  prevQuestionBtn.style.display = "none";
+  submitBtn.style.display = "none";
+  showAnsBtn.style.display = "none";
+  retryBtn.style.display = "inline-block";
+  if (incorrectAnswer.length > 0) {
+    showAnsBtn.style.display = "inline-block";
+  }
+
+  quiz.innerHTML = "";
+  quiz.innerHTML = `<p>Your score is <span>${score}</span>.</p>`;
+  quiz.innerHTML += `<p>Let's do this again next time :)</p>`;
+  score = 0;
+}
+
 function submit() {
   const confirmSubmit = confirm("Are you sure you want to submit?");
   if (!confirmSubmit) {
@@ -263,22 +291,25 @@ function prevQuestion() {
       optionElemContainer.appendChild(label);
       quiz.appendChild(optionElemContainer);
     }
-    stateManager();
   }
   if (currQuestionIndex === 0) {
     prevQuestionBtn.style.display = "none";
   }
+  stateManager();
 }
 
 function stateManager() {
-  const savedAnswer = userAnswers[currQuestionIndex].answer;
+  let savedAnswer = userAnswers[currQuestionIndex];
   if (!savedAnswer) return; // nothing saved yet
-  const inputs = document.querySelectorAll('input[name="quiz"]');
-  inputs.forEach((input) => {
-    if (input.value === savedAnswer) {
-      input.checked = true;
-    }
-  });
+  else {
+    savedAnswer = savedAnswer.answer;
+    const inputs = document.querySelectorAll('input[name="quiz"]');
+    inputs.forEach((input) => {
+      if (input.value === savedAnswer) {
+        input.checked = true;
+      }
+    });
+  }
 }
 
 function randomizeArr(arr) {
@@ -302,3 +333,16 @@ submitBtn.addEventListener("click", () => submit());
 hideBtns();
 
 // TODO: Implement state tracking — save user's selected answer for each question.
+
+function timer() {
+  let time = 120;
+  const countdown = setInterval(() => {
+    counter.textContent = `You have ${time} seconds left`;
+    time--;
+    if (time < 0) {
+      clearInterval(countdown);
+      counter.textContent = `Time up!`;
+      submitWithoutConfirmation();
+    }
+  }, 1000);
+}

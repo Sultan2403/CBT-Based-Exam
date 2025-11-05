@@ -18,6 +18,17 @@ body {
   height: 100vh;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  width: 95vw;
+  gap: 2rem;
+  font-size: 1.6rem;
+}
+
 form {
   display: flex;
   justify-self: center;
@@ -27,6 +38,11 @@ form {
   flex-direction: column;
   gap: 2rem;
   height: 70%;
+  width: 70%;
+  padding: 2rem;
+  border-radius: 10px;
+  position: relative;
+  border: 2px solid #807878;
 }
 
 .question {
@@ -36,6 +52,9 @@ form {
 
 .options {
   background-color: #dcd1b2;
+  padding: 2rem;
+  font-weight: 500;
+  margin: 1rem auto;
 }
 
 .result {
@@ -64,4 +83,19 @@ form {
 .btn:hover {
   background-color: #98ece1;
   transform: scale(1.05);
+}
+
+#counter {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.options-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.quiz {
+  width: 90%;
 }

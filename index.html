@@ -17,21 +17,24 @@
 </head>
 
 <body>
-    <h1>CBT BASED EXAM</h1>
-    <form action="none">
-        <div id="quiz" class="quiz"></div>
-        <div id="result" class="result"></div>
-        <div id="help"></div>
-        <div class="btn-container">
-            <button type="button" id="sbmtBtn" class="btn">Submit</button>
-            <button type="button" id="retryBtn" class="btn">Retry</button>
-            <button type="button" id="showAnsBtn" class="btn">Show Answer(s)</button>
-            <button type="button" id="nextQuestion" class="btn">Next Question</button>
-            <button type="button" id="prevQuestion" class="btn">Previous Question</button>
-            <button type="button" id="startBtn" class="btn">Start Test!</button>
-        </div>
+    <div class="container">
+        <h1>CBT BASED EXAM</h1>
+        <form action="none">
+            <div id="quiz" class="quiz"></div>
+            <div id="result" class="result"></div>
+            <div id="help">You have 2 minutes to complete this test, click the button once you're ready.</div>
+            <div class="btn-container">
+                <button type="button" id="sbmtBtn" class="btn">Submit</button>
+                <button type="button" id="retryBtn" class="btn">Retry</button>
+                <button type="button" id="showAnsBtn" class="btn">Show Answer(s)</button>
+                <button type="button" id="nextQuestion" class="btn">Next Question</button>
+                <button type="button" id="prevQuestion" class="btn">Previous Question</button>
+                <button type="button" id="startBtn" class="btn">Start Test!</button>
+            </div>
+            <div id="counter"></div>
+        </form>
+    </div>
 
-    </form>
     <script type="module" src="./app.js "></script>
 </body>
 
