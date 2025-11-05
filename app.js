@@ -102,7 +102,7 @@ function displayFirstQuestion() {
 
   quiz.innerHTML = "";
   const questionElem = document.createElement("div");
-  questionElem.className = "options";
+  questionElem.className = "question";
   questionElem.innerHTML = questionData.question;
 
   quiz.appendChild(questionElem);
@@ -152,7 +152,7 @@ function nextQuestion() {
   }
   quiz.innerHTML = "";
   const questionElem = document.createElement("div");
-  questionElem.className = "options";
+  questionElem.className = "question";
   questionElem.innerHTML = questionData2.question;
 
   allOptionContainer.innerHTML = "";
@@ -277,7 +277,7 @@ function prevQuestion() {
     const questionData2 = shuffledQuestion[currQuestionIndex];
     quiz.innerHTML = "";
     const questionElem = document.createElement("div");
-    questionElem.className = "options";
+    questionElem.className = "question";
     questionElem.innerHTML = questionData2.question;
 
     quiz.appendChild(questionElem);

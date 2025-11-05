@@ -29,6 +29,10 @@ body {
   font-size: 1.6rem;
 }
 
+h1 {
+  font-size: 3.2rem;
+}
+
 form {
   display: flex;
   justify-self: center;
@@ -46,11 +50,6 @@ form {
 }
 
 .question {
-  font-weight: bold;
-  background-color: #e1e8ef;
-}
-
-.options {
   background-color: #dcd1b2;
   padding: 2rem;
   font-weight: 500;
@@ -71,13 +70,14 @@ form {
 
 .btn {
   display: inline-block;
-  padding: 1rem 2.2rem;
+  padding: 1rem 1.5rem;
   background-color: #15eed1;
   color: black;
   border: 1px solid;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  font-size: 1.6rem;
 }
 
 .btn:hover {
@@ -87,6 +87,7 @@ form {
 
 #counter {
   position: absolute;
+  font-size: 1.4rem;
   top: 20px;
   right: 20px;
 }
@@ -95,7 +96,7 @@ form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  font-size: 2rem;
+  font-size: 1.6rem;
   gap: 1rem;
   margin-top: 1rem;
 }
@@ -108,5 +109,32 @@ form {
 
 .quiz {
   width: 90%;
+  min-width: 200px;
   text-align: center;
+}
+
+@media (max-width: 1640px) {
+  html {
+    font-size: 100%;
+  }
+}
+
+@media (max-width: 1460px) {
+  html {
+    font-size: 68.75%;
+  }
+}
+
+@media (max-width: 460px) {
+  /* Large phones*/
+  html {
+    font-size: 43.75%; /* 8px */
+  }
+}
+
+@media (max-width: 340px) {
+  /* Small phones */
+  html {
+    font-size: 43.75%; /* 7px */
+  }
 }
