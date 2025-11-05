@@ -82,6 +82,7 @@ let incorrectAnswer = [];
 let userAnswers = [];
 let currQuestionIndex = 0;
 let shuffledQuestion;
+let allOptionContainer;
 // Function...
 
 let messageTimeout;
@@ -106,20 +107,21 @@ function displayFirstQuestion() {
 
   quiz.appendChild(questionElem);
 
+  allOptionContainer = document.createElement("div");
+  allOptionContainer.className = "options-container";
   const options = [...questionData.options];
   for (let i = 0; i < options.length; i++) {
     const optionElem = document.createElement("input");
     optionElem.type = "radio";
     optionElem.name = "quiz";
+    optionElem.id = options[i];
     const optionElemContainer = document.createElement("div");
-    optionElemContainer.className = "options-container";
+    // optionElemContainer.className = "options-container";
     optionElem.value = options[i];
 
-    const allOptionContainer = document.createElement("div");
-    allOptionContainer.className = "options-container";
     const label = document.createElement("label");
     label.textContent = options[i];
-    label.htmlFor = "quiz";
+    label.htmlFor = optionElem.id;
     allOptionContainer.appendChild(optionElemContainer);
     optionElemContainer.appendChild(optionElem);
     optionElemContainer.appendChild(label);
@@ -153,6 +155,7 @@ function nextQuestion() {
   questionElem.className = "options";
   questionElem.innerHTML = questionData2.question;
 
+  allOptionContainer.innerHTML = "";
   quiz.appendChild(questionElem);
 
   const options = [...questionData2.options];
@@ -160,15 +163,18 @@ function nextQuestion() {
     const optionElem = document.createElement("input");
     optionElem.type = "radio";
     optionElem.name = "quiz";
+    optionElem.id = options[i];
     const optionElemContainer = document.createElement("div");
+    // optionElemContainer.className = "options-container";
     optionElem.value = options[i];
 
     const label = document.createElement("label");
     label.textContent = options[i];
-    label.htmlFor = "quiz";
+    label.htmlFor = optionElem.id;
+    allOptionContainer.appendChild(optionElemContainer);
     optionElemContainer.appendChild(optionElem);
     optionElemContainer.appendChild(label);
-    quiz.appendChild(optionElemContainer);
+    quiz.appendChild(allOptionContainer);
   }
   stateManager();
 }
@@ -277,19 +283,23 @@ function prevQuestion() {
     quiz.appendChild(questionElem);
 
     const options = [...questionData2.options];
+
     for (let i = 0; i < options.length; i++) {
       const optionElem = document.createElement("input");
       optionElem.type = "radio";
       optionElem.name = "quiz";
+      optionElem.id = options[i];
       const optionElemContainer = document.createElement("div");
+      // optionElemContainer.className = "options-container";
       optionElem.value = options[i];
 
       const label = document.createElement("label");
       label.textContent = options[i];
-      label.htmlFor = "quiz";
+      label.htmlFor = optionElem.id;
+      allOptionContainer.appendChild(optionElemContainer);
       optionElemContainer.appendChild(optionElem);
       optionElemContainer.appendChild(label);
-      quiz.appendChild(optionElemContainer);
+      quiz.appendChild(allOptionContainer);
     }
   }
   if (currQuestionIndex === 0) {
