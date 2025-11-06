@@ -83,6 +83,7 @@ let userAnswers = [];
 let currQuestionIndex = 0;
 let shuffledQuestion;
 let allOptionContainer;
+let countdown;
 // Function...
 
 let messageTimeout;
@@ -109,7 +110,7 @@ function displayFirstQuestion() {
 
   allOptionContainer = document.createElement("div");
   allOptionContainer.className = "options-container";
-  const options = [...questionData.options];
+  const options = randomizeArr([...questionData.options]);
   for (let i = 0; i < options.length; i++) {
     const optionElem = document.createElement("input");
     optionElem.type = "radio";
@@ -148,6 +149,7 @@ function nextQuestion() {
   const questionData2 = shuffledQuestion[currQuestionIndex];
   if (currQuestionIndex === shuffledQuestion.length) {
     nextQuestionBtn.style.display = "none";
+    console.table(shuffledQuestion);
     return;
   }
   quiz.innerHTML = "";
@@ -158,7 +160,7 @@ function nextQuestion() {
   allOptionContainer.innerHTML = "";
   quiz.appendChild(questionElem);
 
-  const options = [...questionData2.options];
+  const options = randomizeArr([...questionData2.options]);
   for (let i = 0; i < options.length; i++) {
     const optionElem = document.createElement("input");
     optionElem.type = "radio";
@@ -209,7 +211,27 @@ function chkAns() {
 }
 
 function submitWithoutConfirmation() {
-  chkAns();
+  const selected = document.querySelector("input[name='quiz']:checked");
+  if (selected) {
+    const answer = selected.value;
+    userAnswers[currQuestionIndex] = {
+      question: questionData.question,
+      answer,
+      isCorrect: answer === questionData.answer,
+    };
+    console.table(userAnswers);
+    if (answer === questionData.answer) {
+      score += 10;
+      console.log(score);
+    } else {
+      incorrectAnswer.push({
+        Question: questionData.question,
+        Answer: answer,
+        Correction: questionData.answer,
+      });
+      console.table(incorrectAnswer);
+    }
+  }
   startBtn.style.display = "none";
   nextQuestionBtn.style.display = "none";
   prevQuestionBtn.style.display = "none";
@@ -221,9 +243,11 @@ function submitWithoutConfirmation() {
   }
 
   quiz.innerHTML = "";
-  quiz.innerHTML = `<p>Your score is <span>${score}</span>.</p>`;
+  quiz.innerHTML = `<p>Your score is <span>${score}/100</span>.</p>`;
   quiz.innerHTML += `<p>Let's do this again next time :)</p>`;
   score = 0;
+  clearInterval(countdown);
+  counter.textContent = `Finished!`;
 }
 
 function submit() {
@@ -232,7 +256,32 @@ function submit() {
     return;
   }
 
-  chkAns();
+  const selected = document.querySelector("input[name='quiz']:checked");
+  if (selected) {
+    const answer = selected.value;
+    userAnswers.forEach((item) => {
+      if (!item === answer) {
+        userAnswers[currQuestionIndex] = {
+          question: questionData.question,
+          answer,
+          isCorrect: answer === questionData.answer,
+        };
+        console.table(userAnswers);
+        if (answer === questionData.answer) {
+          score += 10;
+          console.log(score);
+        } else {
+          incorrectAnswer.push({
+            Question: questionData.question,
+            Answer: answer,
+            Correction: questionData.answer,
+          });
+          console.table(incorrectAnswer);
+        }
+      }
+    });
+  }
+
   startBtn.style.display = "none";
   nextQuestionBtn.style.display = "none";
   prevQuestionBtn.style.display = "none";
@@ -244,9 +293,11 @@ function submit() {
   }
 
   quiz.innerHTML = "";
-  quiz.innerHTML = `<p>Your score is <span>${score}</span>.</p>`;
+  quiz.innerHTML = `<p>Your score is <span>${score}/100</span>.</p>`;
   quiz.innerHTML += `<p>Let's do this again next time :)</p>`;
   score = 0;
+  clearInterval(countdown);
+  counter.textContent = `Finished!`;
 }
 
 function hideBtns() {
@@ -273,6 +324,9 @@ function showAns() {
 function prevQuestion() {
   if (currQuestionIndex > 0) {
     currQuestionIndex--;
+    if (currQuestionIndex < shuffledQuestion.length) {
+      nextQuestionBtn.style.display = "inline-block";
+    }
     score -= 10;
     const questionData2 = shuffledQuestion[currQuestionIndex];
     quiz.innerHTML = "";
@@ -284,6 +338,7 @@ function prevQuestion() {
 
     const options = [...questionData2.options];
 
+    allOptionContainer.innerHTML = "";
     for (let i = 0; i < options.length; i++) {
       const optionElem = document.createElement("input");
       optionElem.type = "radio";
@@ -346,7 +401,7 @@ hideBtns();
 
 function timer() {
   let time = 120;
-  const countdown = setInterval(() => {
+  countdown = setInterval(() => {
     counter.textContent = `You have ${time} seconds left`;
     time--;
     if (time < 0) {
@@ -356,3 +411,5 @@ function timer() {
     }
   }, 1000);
 }
+
+// TODO: Fix tbn hiding logic such that it actually runs at line 150.

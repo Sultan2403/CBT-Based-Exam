@@ -114,12 +114,14 @@ form {
 }
 
 @media (max-width: 1640px) {
+  /* Large Screens */
   html {
     font-size: 100%;
   }
 }
 
 @media (max-width: 1460px) {
+  /* Laptops */
   html {
     font-size: 68.75%;
   }
