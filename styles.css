@@ -113,6 +113,11 @@ form {
   text-align: center;
 }
 
+#help {
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
 @media (max-width: 1640px) {
   /* Large Screens */
   html {

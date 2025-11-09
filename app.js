@@ -1,61 +1,4 @@
-// import { questionBank } from "./storage.js";
-const questionBank = [
-  {
-    question: "What is the capital of France?",
-    options: ["Berlin", "Madrid", "Paris", "Rome"],
-    answer: "Paris",
-  },
-  {
-    question: "Which language runs in a web browser?",
-    options: ["Python", "C", "Java", "JavaScript"],
-    answer: "JavaScript",
-  },
-  {
-    question: "What does CSS stand for?",
-    options: [
-      "Central Style Sheets",
-      "Cascading Style Sheets",
-      "Cascading Simple Sheets",
-      "Cars SUVs Sailboats",
-    ],
-    answer: "Cascading Style Sheets",
-  },
-  {
-    question: "What year was JavaScript launched?",
-    options: ["1996", "1995", "1994", "None of the above"],
-    answer: "1995",
-  },
-  {
-    question: "Which HTML tag is used to define an internal style sheet?",
-    options: ["<script>", "<style>", "<css>", "<link>"],
-    answer: "<style>",
-  },
-  {
-    question: "Inside which HTML element do we put the JavaScript?",
-    options: ["<javascript>", "<js>", "<script>", "<code>"],
-    answer: "<script>",
-  },
-  {
-    question: "Which company developed JavaScript?",
-    options: ["Netscape", "Microsoft", "Sun Microsystems", "Oracle"],
-    answer: "Netscape",
-  },
-  {
-    question: "Which of the following is not a programming language?",
-    options: ["Python", "HTML", "C++", "Java"],
-    answer: "HTML",
-  },
-  {
-    question: "What symbol is used for comments in JavaScript?",
-    options: ["//", "/* */", "#", "<!-- -->"],
-    answer: "//",
-  },
-  {
-    question: "Which keyword is used to declare a constant in JavaScript?",
-    options: ["var", "let", "const", "define"],
-    answer: "const",
-  },
-];
+import { questionBank } from "./storage.js";
 
 // ---------------------------------  DOM......  --------------------------------//
 
@@ -84,16 +27,15 @@ let currQuestionIndex = 0;
 let shuffledQuestion;
 let allOptionContainer;
 let countdown;
+let questionData;
 // Function...
 
 let messageTimeout;
 function displayFirstQuestion() {
-  incorrectAnswer = [];
-  userAnswers = [];
   help.textContent = ``;
   counter.textContent = ``;
   shuffledQuestion = randomizeArr(questionBank);
-  const questionData = shuffledQuestion[currQuestionIndex];
+  questionData = shuffledQuestion[currQuestionIndex];
   console.log(`Currently on index: ${currQuestionIndex}`);
   retryBtn.style.display = "none";
   startBtn.style.display = "none";
@@ -196,11 +138,11 @@ function chkAns() {
       score += 10;
       console.log(score);
     } else {
-      incorrectAnswer.push({
+      incorrectAnswer[currQuestionIndex] = {
         Question: questionData.question,
         Answer: answer,
         Correction: questionData.answer,
-      });
+      };
       console.table(incorrectAnswer);
     }
   } else {
@@ -211,27 +153,7 @@ function chkAns() {
 }
 
 function submitWithoutConfirmation() {
-  const selected = document.querySelector("input[name='quiz']:checked");
-  if (selected) {
-    const answer = selected.value;
-    userAnswers[currQuestionIndex] = {
-      question: questionData.question,
-      answer,
-      isCorrect: answer === questionData.answer,
-    };
-    console.table(userAnswers);
-    if (answer === questionData.answer) {
-      score += 10;
-      console.log(score);
-    } else {
-      incorrectAnswer.push({
-        Question: questionData.question,
-        Answer: answer,
-        Correction: questionData.answer,
-      });
-      console.table(incorrectAnswer);
-    }
-  }
+  chkAns();
   startBtn.style.display = "none";
   nextQuestionBtn.style.display = "none";
   prevQuestionBtn.style.display = "none";
@@ -271,11 +193,11 @@ function submit() {
           score += 10;
           console.log(score);
         } else {
-          incorrectAnswer.push({
+          incorrectAnswer[currQuestionIndex] = {
             Question: questionData.question,
             Answer: answer,
             Correction: questionData.answer,
-          });
+          };
           console.table(incorrectAnswer);
         }
       }
